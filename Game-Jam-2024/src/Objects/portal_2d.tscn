@@ -1,0 +1,100 @@
+[gd_scene load_steps=7 format=3 uid="uid://c6g6rflqeqqkr"]
+
+[ext_resource type="Script" path="res://Portal2D.gd" id="1_x73k5"]
+[ext_resource type="Texture2D" uid="uid://sf4lg81unf6p" path="res://assets/template assets/portal.png" id="2_huqwh"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w5h7g"]
+radius = 69.0
+height = 202.0
+
+[sub_resource type="Animation" id="Animation_5j6co"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/ColorRect:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/ColorRect:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_yyma1"]
+resource_name = "fade_to_black"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/ColorRect:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_nqhm7"]
+_data = {
+"RESET": SubResource("Animation_5j6co"),
+"fade_to_black": SubResource("Animation_yyma1")
+}
+
+[node name="Portal2D" type="Area2D"]
+collision_layer = 0
+monitorable = false
+script = ExtResource("1_x73k5")
+
+[node name="Portal" type="Sprite2D" parent="."]
+position = Vector2(0, -120)
+texture = ExtResource("2_huqwh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -120)
+shape = SubResource("CapsuleShape2D_w5h7g")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_nqhm7")
+}
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
