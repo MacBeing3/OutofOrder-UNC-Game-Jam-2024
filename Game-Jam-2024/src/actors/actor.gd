@@ -2,6 +2,7 @@ extends CharacterBody2D
 class_name actor
 
 @export var  speed = Vector2(600.0, 500.0)
+@export var horizontal_accel = 6000
 @export var gravity = 4000.0
 
 @export var health = 20

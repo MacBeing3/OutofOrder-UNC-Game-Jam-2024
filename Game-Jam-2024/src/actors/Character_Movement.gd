@@ -1,13 +1,8 @@
 extends actor
 
-var type = "player"
 
 @export var jump_cancel_force := 500
-@export var shoot_pos_x := 60
-@export var casting_glyph_time := 0.25
 @export_file var end_scene_path:= ""
-@export var animation_casting_glyph_now:bool = false
-@export var advanced_casting_mode_enabled:bool = false
 
 
 signal health_depleted
@@ -61,10 +56,6 @@ func get_direction() -> Vector2:
 	
 	var direction_y = -1.0 if Input.get_action_strength("jump") and is_on_floor() else 1.0
 
-	
-
-#
-		
 	if Input.is_action_pressed("move_left"):
 		last_direction_x = -1.0
 	else: last_direction_x = 1.0
@@ -85,10 +76,25 @@ func calculate_move_velocity(
 	
 	var output = linear_velocity
 	
-
-	output.x = speed.x * direction.x
-	output.y += gravity * get_physics_process_delta_time()
 	
+	if direction.x == 1:
+		output.x +=  horizontal_accel * get_physics_process_delta_time()
+		output.x = direction.x *min(output.x, speed.x)
+		
+	elif direction.x == -1:
+		output.x +=  horizontal_accel * get_physics_process_delta_time()
+		output.x = direction.x *max(output.x, speed.x)
+	
+	elif direction.x == 0:
+		if output.x > 0:
+			output.x = max(output.x - 2000 * get_physics_process_delta_time(),0)
+
+		elif output.x < 0:
+			output.x = min(output.x + 2000 * get_physics_process_delta_time(),0)	
+
+		
+	output.y += gravity * get_physics_process_delta_time()
+	print(direction.x)
 	#jumping up
 	if direction.y == -1.0:
 		#anim_player.play("jump squish_stretch")
@@ -107,6 +113,7 @@ func calculate_move_velocity(
 	if is_in_portal:
 		output.x = 0.0
 
+	print("velcoity is ", output.x)
 	return output
 
 
@@ -210,3 +217,7 @@ func take_damage(amount: int) -> void:
 func _on_health_depleted():
 	get_tree().change_scene_to_file(end_scene_path)
 	queue_free()
+
+
+func _on_area_2d_area_entered(area):
+	print("I entered teh body")
