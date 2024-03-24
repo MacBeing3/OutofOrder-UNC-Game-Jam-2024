@@ -9,8 +9,15 @@ extends actor
 @onready var ecord_sprite_animator:=$Animators/ECordAnimator
 @onready var jump_squish_animator:=$Animators/JumpNSquish
 
+@onready var cart_slots:= []
+
+
+
 var player_sprites:= []
 var face_flash_timer = 0
+
+enum{Jump,Dash,Double_Jump, etc, other}
+var pickups_collected:=[]
 
 signal health_depleted
 
@@ -27,7 +34,12 @@ var sprite_crouching:bool = false
 func _ready() -> void:
 	var node_player_sprites:=$PlayerSprites
 	for child in  node_player_sprites.get_child_count():
-		player_sprites.append( node_player_sprites.get_child(child))
+		player_sprites.append(node_player_sprites.get_child(child))
+		
+		
+	for child in $CartridgeSlots.get_child_count():
+		cart_slots.append( $CartridgeSlots.get_child(child))
+		print($CartridgeSlots.get_child(child).position.x)
 	
 	
 	
@@ -163,10 +175,30 @@ func _get_sprite_state() -> void:
 	if facing_right:
 		for sprite in player_sprites:
 			sprite.flip_h = false
+			
+		for slots in cart_slots:
+			if slots.position.x < 0:
+				slots.position.x *= -1
+				slots.position.x -= 3
+#-3	
+#-6
+#-3
+#-6
+
+#0
+#3
+#0
+#3
+
 
 	else: 
 		for sprite in player_sprites:
 			sprite.flip_h = true
+			
+		for slots in cart_slots:
+			if slots.position.x >= 0:
+				slots.position.x *= -1
+				slots.position.x -= 3
 
 	if velocity.x == 0 and not is_crouched:
 
@@ -212,6 +244,7 @@ func _get_sprite_state() -> void:
 		face_flash_timer = 0
 		face_flash_animator.play("face_flash")
 		
+		print("pickups collected  ", pickups_collected)
 
 
 

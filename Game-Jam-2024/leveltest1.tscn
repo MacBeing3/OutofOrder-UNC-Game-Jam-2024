@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://dume68ojbwghe"]
+[gd_scene load_steps=4 format=3 uid="uid://dume68ojbwghe"]
 
 [ext_resource type="PackedScene" uid="uid://bi2aia63vg4h0" path="res://src/actors/Player.tscn" id="1_18a8c"]
+[ext_resource type="PackedScene" uid="uid://b2s6t485sw0l" path="res://src/Objects/power_up_disk.tscn" id="2_7qbpp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xv883"]
 size = Vector2(3186, 236)
@@ -44,3 +45,10 @@ offset_top = 307.0
 offset_right = 1979.0
 offset_bottom = 347.0
 color = Color(0, 1, 1, 1)
+
+[node name="Node2D" parent="." instance=ExtResource("2_7qbpp")]
+position = Vector2(982, 201)
+
+[node name="Node2D2" parent="." instance=ExtResource("2_7qbpp")]
+position = Vector2(1222, 208)
+power_up_type = 2

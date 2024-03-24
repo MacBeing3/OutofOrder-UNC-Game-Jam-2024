@@ -15,6 +15,10 @@ run/main_scene="res://leveltest1.tscn"
 config/features=PackedStringArray("4.0", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[display]
+
+window/size/mode=2
+
 [input]
 
 jump={
@@ -41,6 +45,7 @@ move_down={
 [layer_names]
 
 2d_physics/layer_1="Player"
+2d_physics/layer_3="Pickups"
 2d_physics/layer_4="world"
 
 [rendering]
