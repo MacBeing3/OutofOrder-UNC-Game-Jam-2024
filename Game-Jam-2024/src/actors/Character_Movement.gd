@@ -34,12 +34,13 @@ var sprite_crouching:bool = false
 func _ready() -> void:
 	var node_player_sprites:=$PlayerSprites
 	for child in  node_player_sprites.get_child_count():
-		player_sprites.append(node_player_sprites.get_child(child))
+		if node_player_sprites.get_child(child) is Sprite2D:
+			player_sprites.append(node_player_sprites.get_child(child))
 		
 		
 	for child in $CartridgeSlots.get_child_count():
 		cart_slots.append( $CartridgeSlots.get_child(child))
-		print($CartridgeSlots.get_child(child).position.x)
+
 	
 	
 	
@@ -175,6 +176,7 @@ func _get_sprite_state() -> void:
 	if facing_right:
 		for sprite in player_sprites:
 			sprite.flip_h = false
+
 			
 		for slots in cart_slots:
 			if slots.position.x < 0:
@@ -266,7 +268,3 @@ func take_damage(amount: int) -> void:
 func _on_health_depleted():
 	get_tree().change_scene_to_file(end_scene_path)
 	queue_free()
-
-
-func _on_area_2d_area_entered(area):
-	print("I entered teh body")

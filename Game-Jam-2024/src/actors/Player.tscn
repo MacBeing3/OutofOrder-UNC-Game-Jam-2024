@@ -9,16 +9,16 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6trvj"]
 shader = ExtResource("6_e3btb")
-shader_parameter/screen_width = 16384.0
-shader_parameter/screen_height = 9600.0
-shader_parameter/BarrelPower = 1.1
-shader_parameter/color_bleeding = 1.1
-shader_parameter/bleeding_range_x = 1.0
-shader_parameter/bleeding_range_y = 3.0
-shader_parameter/lines_distance = 4.0
+shader_parameter/screen_width = 1024.0
+shader_parameter/screen_height = 600.0
+shader_parameter/BarrelPower = 1.0
+shader_parameter/color_bleeding = 1.05
+shader_parameter/bleeding_range_x = 1.05
+shader_parameter/bleeding_range_y = 1.0
+shader_parameter/lines_distance = 8.0
 shader_parameter/scan_size = 2.0
 shader_parameter/scanline_alpha = 0.9
-shader_parameter/lines_velocity = 30.0
+shader_parameter/lines_velocity = 5.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2nkif"]
 size = Vector2(159, 198)
@@ -154,7 +154,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("PlayerSprites/FaceSprite/ColorRect:position")
+tracks/2/path = NodePath("PlayerSprites/ColorRect:position")
 tracks/2/interp = 0
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -193,7 +193,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("PlayerSprites/FaceSprite/ColorRect:position")
+tracks/2/path = NodePath("PlayerSprites/ColorRect:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -295,6 +295,22 @@ modulate = Color(1, 0.958293, 0.95932, 0.982742)
 position = Vector2(0, -114)
 scale = Vector2(5, 5)
 
+[node name="FaceSprite" type="Sprite2D" parent="PlayerSprites"]
+clip_children = 2
+scale = Vector2(1, 1)
+texture = ExtResource("3_bl0qg")
+hframes = 12
+
+[node name="ColorRect" type="ColorRect" parent="PlayerSprites"]
+material = SubResource("ShaderMaterial_6trvj")
+clip_contents = true
+offset_left = -7.0
+offset_top = -3.0
+offset_right = 7.0
+offset_bottom = 10.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
 [node name="BodySprite" type="Sprite2D" parent="PlayerSprites"]
 texture = ExtResource("2_acbhj")
 hframes = 12
@@ -308,20 +324,6 @@ frame = 1
 [node name="ECordSprite" type="Sprite2D" parent="PlayerSprites"]
 texture = ExtResource("5_cjox8")
 hframes = 12
-
-[node name="FaceSprite" type="Sprite2D" parent="PlayerSprites"]
-position = Vector2(0, -4.76837e-07)
-scale = Vector2(1, 1)
-texture = ExtResource("3_bl0qg")
-hframes = 12
-
-[node name="ColorRect" type="ColorRect" parent="PlayerSprites/FaceSprite"]
-material = SubResource("ShaderMaterial_6trvj")
-clip_contents = true
-offset_left = -7.0
-offset_top = -3.0
-offset_right = 5.0
-offset_bottom = 8.0
 
 [node name="CartridgeSlots" type="Node2D" parent="."]
 position = Vector2(-5.96046e-08, -114)
