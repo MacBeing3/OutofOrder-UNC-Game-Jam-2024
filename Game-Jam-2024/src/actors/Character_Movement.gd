@@ -4,6 +4,13 @@ extends actor
 @export var jump_cancel_force := 500
 @export_file var end_scene_path:= ""
 
+@onready var body_sprite_animator:= $Animators/SpriteAnimator
+@onready var face_flash_animator:=$Animators/FaceFlashEffect #make into a shader?
+@onready var ecord_sprite_animator:=$Animators/ECordAnimator
+@onready var jump_squish_animator:=$Animators/JumpNSquish
+
+var player_sprites:= []
+var face_flash_timer = 0
 
 signal health_depleted
 
@@ -18,8 +25,11 @@ var sprite_crouching:bool = false
 
 		
 func _ready() -> void:
+	var node_player_sprites:=$PlayerSprites
+	for child in  node_player_sprites.get_child_count():
+		player_sprites.append( node_player_sprites.get_child(child))
 	
-	pass
+	
 	
 
 func _process(_delta) -> void:
@@ -94,10 +104,10 @@ func calculate_move_velocity(
 
 		
 	output.y += gravity * get_physics_process_delta_time()
-	print(direction.x)
+
 	#jumping up
 	if direction.y == -1.0:
-		#anim_player.play("jump squish_stretch")
+		jump_squish_animator.play("jump squish_stretch")
 		#$Node2D/JumpAudio.play()
 		output.y = speed.y * direction.y
 	
@@ -113,7 +123,7 @@ func calculate_move_velocity(
 	if is_in_portal:
 		output.x = 0.0
 
-	print("velcoity is ", output.x)
+
 	return output
 
 
@@ -149,40 +159,41 @@ func direction_facing() -> Vector2:
 
 
 func _get_sprite_state() -> void:
-	pass
-#		if facing_right:
-#			player_sprite.flip_h = false
-#			shoot_position.set_position(Vector2(shoot_pos_x,-45))		
-#		else: 
-#			player_sprite.flip_h = true
-#			shoot_position.set_position(Vector2(-1*shoot_pos_x,-45))
-#
-#		if velocity.x == 0 and not is_crouched:
-#
-#			sprite_animator.play("Idle")
-#			sprite_crouching = false
+
+	if facing_right:
+		for sprite in player_sprites:
+			sprite.flip_h = false
+
+	else: 
+		for sprite in player_sprites:
+			sprite.flip_h = true
+
+	if velocity.x == 0 and not is_crouched:
+
+		body_sprite_animator.play("Idle",-1,0.5)
+		ecord_sprite_animator.stop()
+		sprite_crouching = false
 #
 #		elif velocity.x == 0 and is_crouched and sprite_crouching == false:
 #			sprite_animator.play("Crouch")
 #			sprite_crouching = true
-#
-#		elif velocity.x != 0:
-#			sprite_crouching = false
-#			if facing_right:
-#				player_sprite.flip_h = false
-#				if not sprite_animator.current_animation == "Moving_Right":
-#					sprite_animator.play("Moving_Right")
-#				shoot_position.set_position(Vector2(shoot_pos_x,-45))
-#				return
-#				#run particles
-#			if not facing_right:
-#				player_sprite.flip_h = true
-#				if not sprite_animator.current_animation == "Moving_Right":
-#					sprite_animator.play("Moving_Right")
-#				shoot_position.set_position(Vector2(-1*shoot_pos_x,-45))
-#				return
-#				#run particles direction * -1
-#
+
+	if velocity.x != 0:
+		sprite_crouching = false
+		if facing_right:
+			if not body_sprite_animator.current_animation == "Moving_Right":
+				body_sprite_animator.play("Moving_Right")
+				ecord_sprite_animator.play("Moving_Right")
+
+			
+				#run particles
+		if not facing_right:
+			if not body_sprite_animator.current_animation == "Moving_Right":
+				body_sprite_animator.play("Moving_Right")
+				ecord_sprite_animator.play("Moving_Right")
+			
+				#run particles direction * -1
+
 #	else: 
 #
 #		if plant_glider_active:
@@ -195,7 +206,12 @@ func _get_sprite_state() -> void:
 #
 #		else: return
 #
-#
+	#after effects
+	face_flash_timer += get_process_delta_time()
+	if face_flash_timer >= 3: #could make a random interval
+		face_flash_timer = 0
+		face_flash_animator.play("face_flash")
+		
 
 
 
