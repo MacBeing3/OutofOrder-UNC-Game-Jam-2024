@@ -4,10 +4,21 @@ extends actor
 @export var jump_cancel_force := 500
 @export_file var end_scene_path:= ""
 
+#fly export vars
+
+@export var fly_accel:= 500
+@export var fly_max_speed:= 500
+
+#animators
 @onready var body_sprite_animator:= $Animators/SpriteAnimator
 @onready var face_flash_animator:=$Animators/FaceFlashEffect #make into a shader?
 @onready var ecord_sprite_animator:=$Animators/ECordAnimator
 @onready var jump_squish_animator:=$Animators/JumpNSquish
+@onready var face_animator:=$Animators/FaceAnimator
+
+@onready var face_sprite:= $PlayerSprites/FaceSprite
+
+@onready var flying_particles:= $Particles/FlyingBoost
 
 @onready var cart_slots:= []
 
@@ -16,8 +27,16 @@ extends actor
 var player_sprites:= []
 var face_flash_timer = 0
 
-enum{Jump,Dash,Double_Jump, etc, other}
+enum{Jump,Dash,Fly, etc, other}
 var pickups_collected:=[]
+var _power_can_jump: bool = false
+var _power_can_dash: bool= false
+var _power_can_fly: bool= false
+var _is_flying:bool = false
+
+#fly stuff
+var _jump_finished: bool = false
+
 
 signal health_depleted
 
@@ -56,6 +75,7 @@ func _physics_process(_delta: float) -> void:
 	velocity = calculate_move_velocity(velocity,direction,speed, is_jump_interrupted,is_in_portal)
 	up_direction = Vector2.UP
 	
+	_handle_inputs()
 	
 	_get_sprite_state()
 	
@@ -99,7 +119,7 @@ func calculate_move_velocity(
 	
 	var output = linear_velocity
 	
-	
+#	X movement
 	if direction.x == 1:
 		output.x +=  horizontal_accel * get_physics_process_delta_time()
 		output.x = direction.x *min(output.x, speed.x)
@@ -115,27 +135,33 @@ func calculate_move_velocity(
 		elif output.x < 0:
 			output.x = min(output.x + 2000 * get_physics_process_delta_time(),0)	
 
-		
-	output.y += gravity * get_physics_process_delta_time()
+#		Y Movemtn
+
+	output.y += gravity * get_physics_process_delta_time() if not _is_flying else 0
 
 	#jumping up
-	if direction.y == -1.0:
+	if direction.y == -1.0 and _power_can_jump:
+		_jump_finished = false
 		jump_squish_animator.play("jump squish_stretch")
 		#$Node2D/JumpAudio.play()
 		output.y = speed.y * direction.y
-	
-	if velocity.y < 0 and is_jump_interrupted:
+		
+	if _is_flying:
+
+		output.y -= direction.y* fly_accel * get_physics_process_delta_time()
+		output.y = direction.y * min(output.y, fly_max_speed)
+
+	if velocity.y < 0 and is_jump_interrupted and not _is_flying:
 		output.y += jump_cancel_force
-			
 
 		
 	if velocity.y > 0.0: #falling downwards gravity
 		pass
 	
+	
 			
 	if is_in_portal:
 		output.x = 0.0
-
 
 	return output
 
@@ -182,15 +208,6 @@ func _get_sprite_state() -> void:
 			if slots.position.x < 0:
 				slots.position.x *= -1
 				slots.position.x -= 3
-#-3	
-#-6
-#-3
-#-6
-
-#0
-#3
-#0
-#3
 
 
 	else: 
@@ -202,43 +219,38 @@ func _get_sprite_state() -> void:
 				slots.position.x *= -1
 				slots.position.x -= 3
 
-	if velocity.x == 0 and not is_crouched:
+	if is_on_floor():
+		if velocity.x == 0 and not is_crouched:
 
-		body_sprite_animator.play("Idle",-1,0.5)
-		ecord_sprite_animator.stop()
-		sprite_crouching = false
-#
-#		elif velocity.x == 0 and is_crouched and sprite_crouching == false:
-#			sprite_animator.play("Crouch")
-#			sprite_crouching = true
+			body_sprite_animator.play("Idle",-1,0.5)
+			ecord_sprite_animator.stop()
+			sprite_crouching = false
+	#
+	#		elif velocity.x == 0 and is_crouched and sprite_crouching == false:
+	#			sprite_animator.play("Crouch")
+	#			sprite_crouching = true
 
-	if velocity.x != 0:
-		sprite_crouching = false
-		if facing_right:
-			if not body_sprite_animator.current_animation == "Moving_Right":
-				body_sprite_animator.play("Moving_Right")
-				ecord_sprite_animator.play("Moving_Right")
+		if velocity.x != 0:
+			sprite_crouching = false
+			if facing_right:
+				if not body_sprite_animator.current_animation == "Moving_Right":
+					body_sprite_animator.play("Moving_Right")
+					ecord_sprite_animator.play("Moving_Right")
 
-			
-				#run particles
-		if not facing_right:
-			if not body_sprite_animator.current_animation == "Moving_Right":
-				body_sprite_animator.play("Moving_Right")
-				ecord_sprite_animator.play("Moving_Right")
-			
-				#run particles direction * -1
+				
+					#run particles
+			if not facing_right:
+				if not body_sprite_animator.current_animation == "Moving_Right":
+					body_sprite_animator.play("Moving_Right")
+					ecord_sprite_animator.play("Moving_Right")
+				
+					#run particles direction * -1
 
-#	else: 
-#
-#		if plant_glider_active:
-#			if facing_right:
-#				player_sprite.flip_h = false
-#			else: player_sprite.flip_h = true
-#
-#			if not sprite_animator.current_animation == "Plant_Cast":
-#				sprite_animator.play("Plant_Cast")
-#
-#		else: return
+	else: 
+		face_sprite.frame_coords = Vector2(0,1)
+#		face_animator.play("flying")
+	#
+	#		else: return
 #
 	#after effects
 	face_flash_timer += get_process_delta_time()
@@ -250,7 +262,32 @@ func _get_sprite_state() -> void:
 
 
 
-					
+func _handle_inputs():
+	
+	if velocity.y > 0 and Input.is_action_pressed("jump") and not _is_flying:
+		_jump_finished = true
+	
+	if Input.is_action_pressed("jump") and _power_can_fly and not is_on_floor() and _jump_finished:
+		_is_flying = true
+		flying_particles.set_emitting(true)
+
+	
+	if (Input.is_action_just_released("jump") or is_on_floor()) and _is_flying:
+		_is_flying = false
+		flying_particles.set_emitting(false)
+		
+	
+
+		
+
+
+func _check_pickups():
+	for pickup in pickups_collected:
+		if pickup == Jump:
+			_power_can_jump = true
+			
+		if pickup == Fly:
+			_power_can_fly = true
 				
 
 

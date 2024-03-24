@@ -1,8 +1,9 @@
-[gd_scene load_steps=22 format=3 uid="uid://bi2aia63vg4h0"]
+[gd_scene load_steps=28 format=3 uid="uid://bi2aia63vg4h0"]
 
 [ext_resource type="Script" path="res://src/actors/Character_Movement.gd" id="1_gixt6"]
 [ext_resource type="Texture2D" uid="uid://ba3uaqtrdka7n" path="res://assets/Body-Base-v1.png" id="2_acbhj"]
-[ext_resource type="Texture2D" uid="uid://b5t41xabv3odh" path="res://assets/Face-v1.png" id="3_bl0qg"]
+[ext_resource type="Texture2D" uid="uid://d3pow2yb1dii1" path="res://assets/Packed-Face-v2.png" id="2_tfmyv"]
+[ext_resource type="Texture2D" uid="uid://d3msnvppygrfx" path="res://assets/loading-bar.png" id="3_kd8vp"]
 [ext_resource type="Texture2D" uid="uid://d3ftmn68ohhdv" path="res://assets/Face-Flash-v1.png" id="4_w5agf"]
 [ext_resource type="Texture2D" uid="uid://yrodq4nwjt0e" path="res://assets/Ecord-v1.png" id="5_cjox8"]
 [ext_resource type="Shader" path="res://src/NodeCRTEffect.gdshader" id="6_e3btb"]
@@ -281,6 +282,39 @@ _data = {
 "face_flash": SubResource("Animation_1m8fw")
 }
 
+[sub_resource type="Animation" id="Animation_1xrst"]
+resource_name = "flying"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../PlayerSprites/FaceSprite:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0hoju"]
+_data = {
+"flying": SubResource("Animation_1xrst")
+}
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_8b1h4"]
+
+[sub_resource type="Curve" id="Curve_orkaw"]
+min_value = -400.0
+max_value = 800.0
+_data = [Vector2(0, 800), 0.0, 0.0, 0, 0, Vector2(0.412088, -214.545), 0.0, 0.0, 0, 0, Vector2(1, -400), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_cnbuj"]
+offsets = PackedFloat32Array(0, 0.291391, 0.675497, 0.834437)
+colors = PackedColorArray(1, 0.188235, 0.176471, 1, 1, 0.331373, 0.109804, 1, 1, 0.47451, 0.0431373, 1, 1, 0.8, 0, 0.592157)
+
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 collision_mask = 13
 script = ExtResource("1_gixt6")
@@ -297,11 +331,22 @@ scale = Vector2(5, 5)
 
 [node name="FaceSprite" type="Sprite2D" parent="PlayerSprites"]
 clip_children = 2
-scale = Vector2(1, 1)
-texture = ExtResource("3_bl0qg")
+position = Vector2(-1, 2.4)
+texture = ExtResource("2_tfmyv")
 hframes = 12
+vframes = 2
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="PlayerSprites"]
+modulate = Color(1, 1, 1, 0.627451)
+offset_left = -7.0
+offset_top = 1.0
+offset_right = 5.0
+offset_bottom = 3.0
+value = 100.0
+texture_progress = ExtResource("3_kd8vp")
 
 [node name="ColorRect" type="ColorRect" parent="PlayerSprites"]
+visible = false
 material = SubResource("ShaderMaterial_6trvj")
 clip_contents = true
 offset_left = -7.0
@@ -316,7 +361,6 @@ texture = ExtResource("2_acbhj")
 hframes = 12
 
 [node name="FlashEffectSprite" type="Sprite2D" parent="PlayerSprites"]
-visible = false
 texture = ExtResource("4_w5agf")
 hframes = 12
 frame = 1
@@ -404,5 +448,34 @@ libraries = {
 libraries = {
 "": SubResource("AnimationLibrary_eb6lu")
 }
+
+[node name="FaceAnimator" type="AnimationPlayer" parent="Animators"]
+libraries = {
+"": SubResource("AnimationLibrary_0hoju")
+}
+
+[node name="Particles" type="Node2D" parent="."]
+
+[node name="FlyingBoost" type="CPUParticles2D" parent="Particles"]
+position = Vector2(1, 39)
+emitting = false
+amount = 750
+lifetime = 0.3
+lifetime_randomness = 0.3
+texture = SubResource("CanvasTexture_8b1h4")
+emission_shape = 3
+emission_rect_extents = Vector2(40, 1)
+direction = Vector2(0, 1)
+spread = 25.0
+initial_velocity_min = 500.0
+initial_velocity_max = 500.0
+linear_accel_curve = SubResource("Curve_orkaw")
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+scale_amount_min = 2.0
+scale_amount_max = 3.0
+color_ramp = SubResource("Gradient_cnbuj")
+hue_variation_min = 0.32
+hue_variation_max = 1.0
 
 [connection signal="health_depleted" from="." to="." method="_on_health_depleted"]
