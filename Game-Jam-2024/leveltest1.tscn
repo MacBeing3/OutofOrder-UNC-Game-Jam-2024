@@ -51,7 +51,7 @@ offset_bottom = 347.0
 color = Color(0, 1, 1, 1)
 
 [node name="Node2D" parent="." instance=ExtResource("2_7qbpp")]
-position = Vector2(982, -54)
+position = Vector2(973, 208)
 
 [node name="Node2D2" parent="." instance=ExtResource("2_7qbpp")]
 position = Vector2(625, 208)

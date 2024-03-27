@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://b3rop2635llu1"]
+[gd_scene load_steps=10 format=3 uid="uid://b3rop2635llu1"]
 
 [ext_resource type="Texture2D" uid="uid://djx2pvwkessog" path="res://assets/tileset/world_tiles_v1.png" id="1_bv342"]
-[ext_resource type="Texture2D" uid="uid://cohroih4dqg4m" path="res://assets/act 1/act-1-v1.png" id="1_njai8"]
+[ext_resource type="Texture2D" uid="uid://djqg3cd0wtgdm" path="res://assets/act 1/act-1-v2.png" id="2_xnd1r"]
+[ext_resource type="Shader" path="res://src/NodeCRTEffect.gdshader" id="3_0qcfn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jfrq7"]
 texture = ExtResource("1_bv342")
@@ -119,7 +120,299 @@ texture = ExtResource("1_bv342")
 [sub_resource type="TileSet" id="TileSet_0fuxn"]
 sources/0 = SubResource("TileSetAtlasSource_jfrq7")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hvxpm"]
+shader = ExtResource("3_0qcfn")
+shader_parameter/screen_width = 1024.0
+shader_parameter/screen_height = 600.0
+shader_parameter/BarrelPower = 1.0
+shader_parameter/color_bleeding = 1.05
+shader_parameter/bleeding_range_x = 1.05
+shader_parameter/bleeding_range_y = 1.05
+shader_parameter/lines_distance = 8.0
+shader_parameter/scan_size = 2.0
+shader_parameter/scanline_alpha = 0.9
+shader_parameter/lines_velocity = 5.0
+
+[sub_resource type="Animation" id="Animation_ae248"]
+resource_name = "act1"
+length = 45.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Guy:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3.1, 5, 6, 6.25, 6.5, 6.75, 7, 7.25, 7.5, 7.75, 8, 8.25, 8.5, 8.75, 10.8, 12.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 5, 6, 5]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Machine:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 3, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [7, 8, 9, 8, 9, 8, 9, 8, 9, 8, 9, 8, 9, 8, 9, 8, 9, 8, 9]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ScreenPartcl:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(3, 3.05, 3.1, 3.15, 3.2, 3.25, 3.3, 3.35, 3.4, 3.45, 3.5, 3.55, 3.6, 3.65, 3.7, 3.75, 3.8, 3.85, 3.95, 4, 4.05, 4.1, 4.15, 4.2, 4.25, 4.3, 4.35, 4.4, 4.45, 4.5, 4.55, 4.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [10, 11, 12, 10, 11, 12, 10, 11, 12, 10, 11, 12, 10, 11, 12, 10, 11, 12, 10, 11, 12, 10, 11, 12, 10, 11, 12, 10, 11, 12, 10, 11]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ScreenPartcl:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 3, 4.7),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Guy:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3, 3.1, 9.5, 9.8, 10, 10.1, 10.2, 10.3, 10.9, 11.1, 11.5, 12, 13, 13.5, 14),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(700, 450), Vector2(693, 450), Vector2(686, 454), Vector2(680, 457), Vector2(686, 454), Vector2(693, 450), Vector2(680, 457), Vector2(700, 450), Vector2(693, 450), Vector2(686, 454), Vector2(680, 457), Vector2(686, 454), Vector2(693, 450), Vector2(680, 457), Vector2(700, 450), Vector2(693, 450), Vector2(686, 454), Vector2(680, 457), Vector2(686, 454), Vector2(693, 450), Vector2(680, 457), Vector2(700, 450), Vector2(693, 450), Vector2(686, 454), Vector2(680, 457), Vector2(686, 454), Vector2(693, 450), Vector2(680, 457), Vector2(700, 450), Vector2(693, 450), Vector2(686, 454), Vector2(712, 454), Vector2(900, 454), Vector2(1081, 377), Vector2(1259, 454), Vector2(1352, 397), Vector2(1552, 354), Vector2(1755, 454), Vector2(1470, 386), Vector2(944, 454), Vector2(708, 454), Vector2(675, 464), Vector2(675, 464), Vector2(413, 464), Vector2(166, 464)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Guy:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3, 9.4, 9.8, 10, 10.1, 10.2, 10.3, 10.8, 11.1, 11.5, 12, 13),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0.0, 0.133209, 0.116539, -0.0414999, 0.116539, 0.133209, -0.0414999, 0.0, 0.133209, 0.116539, -0.0414999, 0.116539, 0.133209, -0.0414999, 0.0, 0.133209, 0.116539, -0.0414999, 0.116539, 0.133209, -0.0414999, 0.0, 0.133209, 0.116539, -0.0414999, 0.116539, 0.133209, -0.0414999, 0.0, 0.133209, 0.116539, 0.0, 0.301942, 0.0, -0.301942, -0.150098, -0.151844, 0.150098, -0.00174533, -0.306745, -0.481253, 0.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Guy/CPUParticles2D:emitting")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 6, 8.75),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Guy/CPUParticles2D2:emitting")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 6, 8.75),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Guy:flip_h")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 9.4, 10.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Guy:visible")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0, 10.5, 10.8, 14.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [true, false, true, false]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Sign:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 12.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_o28dy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Guy:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Machine:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [7]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ScreenPartcl:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [10]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ScreenPartcl:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Guy:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(700, 450)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Guy:rotation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.133209]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Guy/CPUParticles2D:emitting")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Guy/CPUParticles2D2:emitting")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Guy:flip_h")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Guy:visible")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Sign:visible")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_12ehj"]
+_data = {
+"RESET": SubResource("Animation_o28dy"),
+"act1": SubResource("Animation_ae248")
+}
+
 [node name="ArcadeGame" type="Node2D"]
+metadata/_edit_vertical_guides_ = [575.0, 625.0]
 
 [node name="TileMap" type="TileMap" parent="."]
 scale = Vector2(5, 5)
@@ -132,29 +425,87 @@ layer_1/modulate = Color(1, 1, 1, 1)
 layer_1/y_sort_enabled = false
 layer_1/y_sort_origin = 0
 layer_1/z_index = 0
-layer_1/tile_data = PackedInt32Array(1, 262144, 0, 2, 327680, 0, 4, 262144, 0, 6, 327680, 0, 9, 262144, 0, 12, 393216, 0, 14, 327680, 0)
+layer_1/tile_data = PackedInt32Array(1, 262144, 0, 2, 327680, 0, 4, 262144, 0, 6, 327680, 0, 9, 262144, 0, 12, 393216, 0, 14, 327680, 0, 16, 262144, 0, 22, 262144, 0, 26, 262144, 0, 19, 393216, 0, 18, 327680, 0, 25, 327680, 0)
+layer_2/name = ""
+layer_2/enabled = true
+layer_2/modulate = Color(1, 1, 1, 1)
+layer_2/y_sort_enabled = false
+layer_2/y_sort_origin = 0
+layer_2/z_index = 0
+layer_2/tile_data = PackedInt32Array()
 
-[node name="initalspirte" type="Sprite2D" parent="."]
-position = Vector2(686, 533)
+[node name="Machine" type="Sprite2D" parent="."]
+position = Vector2(590, 450)
 scale = Vector2(5, 5)
-texture = ExtResource("1_njai8")
-hframes = 5
-vframes = 2
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-
-[node name="Guy" type="Sprite2D" parent="."]
-position = Vector2(786, 538)
-scale = Vector2(5, 5)
-texture = ExtResource("1_njai8")
-hframes = 5
-vframes = 2
-frame = 1
-
-[node name="machine" type="Sprite2D" parent="."]
-position = Vector2(1289, 435)
-scale = Vector2(5, 5)
-texture = ExtResource("1_njai8")
-hframes = 6
+texture = ExtResource("2_xnd1r")
+hframes = 7
 vframes = 2
 frame = 7
+
+[node name="ScreenPartcl" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(650, 430)
+scale = Vector2(5, 5)
+texture = ExtResource("2_xnd1r")
+hframes = 7
+vframes = 2
+frame = 10
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_hvxpm")
+offset_left = 575.0
+offset_top = 407.0
+offset_right = 624.0
+offset_bottom = 453.0
+
+[node name="Sign" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(615, 510)
+scale = Vector2(5, 5)
+texture = ExtResource("1_bv342")
+region_enabled = true
+region_rect = Rect2(51, 52.5, 28, 20)
+
+[node name="Guy" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(700, 450)
+rotation = 0.133209
+scale = Vector2(5, 5)
+texture = ExtResource("2_xnd1r")
+flip_h = true
+hframes = 7
+vframes = 2
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Guy"]
+modulate = Color(0, 0.639216, 1, 1)
+position = Vector2(-6.63177, -8.48645)
+rotation = -0.116539
+scale = Vector2(0.2, 0.2)
+amount = 45
+lifetime = 0.6
+explosiveness = 0.15
+direction = Vector2(-1, 1)
+initial_velocity_min = 30.0
+initial_velocity_max = 30.0
+scale_amount_min = 4.0
+scale_amount_max = 5.0
+
+[node name="CPUParticles2D2" type="CPUParticles2D" parent="Guy"]
+modulate = Color(0, 0.639216, 1, 1)
+position = Vector2(-1.6192, -8.67053)
+rotation = -0.116539
+scale = Vector2(0.2, 0.2)
+amount = 45
+lifetime = 0.6
+explosiveness = 0.15
+direction = Vector2(-1, 1)
+initial_velocity_min = 35.0
+initial_velocity_max = 35.0
+scale_amount_min = 4.0
+scale_amount_max = 5.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "act1"
+libraries = {
+"": SubResource("AnimationLibrary_12ehj")
+}
