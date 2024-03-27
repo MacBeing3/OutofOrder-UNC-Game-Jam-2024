@@ -17,7 +17,9 @@ extends actor
 @onready var face_animator:=$Animators/FaceAnimator
 
 @onready var face_sprite:= $PlayerSprites/FaceSprite
+@onready var expression_sprite :=$PlayerSprites/ExpressionSprite
 
+@onready var rocket_energy_bar:= $PlayerSprites/TextureProgressBar
 @onready var flying_particles:= $Particles/FlyingBoost
 
 @onready var cart_slots:= []
@@ -203,12 +205,11 @@ func _get_sprite_state() -> void:
 		for sprite in player_sprites:
 			sprite.flip_h = false
 
-			
 		for slots in cart_slots:
 			if slots.position.x < 0:
 				slots.position.x *= -1
 				slots.position.x -= 3
-
+		rocket_energy_bar.position.x = -7
 
 	else: 
 		for sprite in player_sprites:
@@ -219,7 +220,9 @@ func _get_sprite_state() -> void:
 				slots.position.x *= -1
 				slots.position.x -= 3
 
-	if is_on_floor():
+		rocket_energy_bar.position.x = -5
+
+	if true: #cant be bothered to unident
 		if velocity.x == 0 and not is_crouched:
 
 			body_sprite_animator.play("Idle",-1,0.5)
@@ -236,6 +239,7 @@ func _get_sprite_state() -> void:
 				if not body_sprite_animator.current_animation == "Moving_Right":
 					body_sprite_animator.play("Moving_Right")
 					ecord_sprite_animator.play("Moving_Right")
+					face_animator.play("Moving_Right")
 
 				
 					#run particles
@@ -246,19 +250,35 @@ func _get_sprite_state() -> void:
 				
 					#run particles direction * -1
 
-	else: 
-		face_sprite.frame_coords = Vector2(0,1)
-#		face_animator.play("flying")
-	#
+	if _is_flying: 
+		body_sprite_animator.stop()
+		if face_animator.current_animation != "flying":
+			face_animator.play("flying")
+
+
+		rocket_energy_bar.visible = true
+
+		rocket_energy_bar.value -= get_physics_process_delta_time()
+
+			
+		if rocket_energy_bar.value <= 0:
+			_is_flying = false
+			flying_particles.set_emitting(false)
 	#		else: return
 #
 	#after effects
-	face_flash_timer += get_process_delta_time()
-	if face_flash_timer >= 3: #could make a random interval
+
+	face_flash_timer -= get_process_delta_time()
+	if face_flash_timer <= 0: #could make a random interval
 		face_flash_timer = 0
 		face_flash_animator.play("face_flash")
+		face_flash_timer = randi_range(2,5)
 		
+		#maybe make it so screen only changes when this flashes
+		# so stays on previous animation
 		print("pickups collected  ", pickups_collected)
+		
+		
 
 
 
@@ -267,15 +287,15 @@ func _handle_inputs():
 	if velocity.y > 0 and Input.is_action_pressed("jump") and not _is_flying:
 		_jump_finished = true
 	
-	if Input.is_action_pressed("jump") and _power_can_fly and not is_on_floor() and _jump_finished:
+	if (Input.is_action_pressed("jump") and _power_can_fly) and ((not is_on_floor() and _jump_finished) or (_power_can_jump == false)) and rocket_energy_bar.value != 0:
 		_is_flying = true
 		flying_particles.set_emitting(true)
 
 	
-	if (Input.is_action_just_released("jump") or is_on_floor()) and _is_flying:
+	if Input.is_action_just_released("jump"):
 		_is_flying = false
 		flying_particles.set_emitting(false)
-		
+		rocket_energy_bar.visible = false
 	
 
 		
@@ -305,3 +325,7 @@ func take_damage(amount: int) -> void:
 func _on_health_depleted():
 	get_tree().change_scene_to_file(end_scene_path)
 	queue_free()
+
+
+func _on_timer_timeout():
+	print("5 sec has passed")
