@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://c6g6rflqeqqkr"]
 
-[ext_resource type="Script" path="res://Portal2D.gd" id="1_x73k5"]
-[ext_resource type="Texture2D" uid="uid://sf4lg81unf6p" path="res://assets/template assets/portal.png" id="2_huqwh"]
+[ext_resource type="Script" path="res://src/Objects/Portal2D.gd" id="1_5nwof"]
+[ext_resource type="Texture2D" uid="uid://dnol2jnsgrvqj" path="res://assets/tileset/world_tiles_v3.png" id="2_vwao1"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w5h7g"]
 radius = 69.0
@@ -70,14 +70,18 @@ _data = {
 [node name="Portal2D" type="Area2D"]
 collision_layer = 0
 monitorable = false
-script = ExtResource("1_x73k5")
+script = ExtResource("1_5nwof")
 
 [node name="Portal" type="Sprite2D" parent="."]
-position = Vector2(0, -120)
-texture = ExtResource("2_huqwh")
+position = Vector2(-78, -210)
+scale = Vector2(5, 5)
+texture = ExtResource("2_vwao1")
+centered = false
+region_enabled = true
+region_rect = Rect2(160.188, 84.054, 32, 42)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -120)
+position = Vector2(0, -106)
 shape = SubResource("CapsuleShape2D_w5h7g")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]

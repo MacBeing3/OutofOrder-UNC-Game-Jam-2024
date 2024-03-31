@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wdl05vpmk3va"
-path="res://.godot/imported/world_tiles_v1.png-9ca9d113feba09f29ea3feba0106c6ba.ctex"
+uid="uid://pxoquiab00v"
+path="res://.godot/imported/circle-elec.png-7aa6e49229d4c0f0a2f26ee8623faa75.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tileset/world_tiles_v1.png"
-dest_files=["res://.godot/imported/world_tiles_v1.png-9ca9d113feba09f29ea3feba0106c6ba.ctex"]
+source_file="res://assets/objects/circle-elec.png"
+dest_files=["res://.godot/imported/circle-elec.png-7aa6e49229d4c0f0a2f26ee8623faa75.ctex"]
 
 [params]
 

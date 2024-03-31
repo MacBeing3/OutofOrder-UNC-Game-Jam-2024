@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wdl05vpmk3va"
-path="res://.godot/imported/world_tiles_v1.png-9ca9d113feba09f29ea3feba0106c6ba.ctex"
+uid="uid://bv4kk34t3yhia"
+path="res://.godot/imported/act-1-tail-awake-v1.png-467cc771a37370aa0818966d8188d7a6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tileset/world_tiles_v1.png"
-dest_files=["res://.godot/imported/world_tiles_v1.png-9ca9d113feba09f29ea3feba0106c6ba.ctex"]
+source_file="res://assets/act 1/act-1-tail-awake-v1.png"
+dest_files=["res://.godot/imported/act-1-tail-awake-v1.png-467cc771a37370aa0818966d8188d7a6.ctex"]
 
 [params]
 

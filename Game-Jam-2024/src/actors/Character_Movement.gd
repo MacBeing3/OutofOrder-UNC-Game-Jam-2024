@@ -19,7 +19,7 @@ extends actor
 @onready var face_sprite:= $PlayerSprites/FaceSprite
 @onready var expression_sprite :=$PlayerSprites/ExpressionSprite
 
-@onready var rocket_energy_bar:= $PlayerSprites/TextureProgressBar
+@onready var loading_energy_bar:= $PlayerSprites/LoadingProgressBar
 @onready var flying_particles:= $Particles/FlyingBoost
 
 @onready var cart_slots:= []
@@ -32,12 +32,18 @@ var face_flash_timer = 0
 enum{Jump,Dash,Fly, etc, other}
 var pickups_collected:=[]
 var _power_can_jump: bool = false
+var _jump_finished: bool = false
+
+
 var _power_can_dash: bool= false
+var _is_dashing:bool = false
+
+
 var _power_can_fly: bool= false
 var _is_flying:bool = false
 
 #fly stuff
-var _jump_finished: bool = false
+
 
 
 signal health_depleted
@@ -51,9 +57,14 @@ var is_crouched:bool = false
 var sprite_crouching:bool = false
 
 
+var loading_value:float
+
 		
 func _ready() -> void:
 	var node_player_sprites:=$PlayerSprites
+	
+	_check_pickups()
+	
 	for child in  node_player_sprites.get_child_count():
 		if node_player_sprites.get_child(child) is Sprite2D:
 			player_sprites.append(node_player_sprites.get_child(child))
@@ -209,7 +220,7 @@ func _get_sprite_state() -> void:
 			if slots.position.x < 0:
 				slots.position.x *= -1
 				slots.position.x -= 3
-		rocket_energy_bar.position.x = -7
+		loading_energy_bar.position.x = -7
 
 	else: 
 		for sprite in player_sprites:
@@ -220,7 +231,7 @@ func _get_sprite_state() -> void:
 				slots.position.x *= -1
 				slots.position.x -= 3
 
-		rocket_energy_bar.position.x = -5
+		loading_energy_bar.position.x = -5
 
 	if true: #cant be bothered to unident
 		if velocity.x == 0 and not is_crouched:
@@ -256,12 +267,13 @@ func _get_sprite_state() -> void:
 			face_animator.play("flying")
 
 
-		rocket_energy_bar.visible = true
+		loading_energy_bar.visible = true
 
-		rocket_energy_bar.value -= get_physics_process_delta_time()
+		AutoLoad.rocket_fuel_left -= get_physics_process_delta_time()
+		loading_energy_bar.value = AutoLoad.rocket_fuel_left
 
 			
-		if rocket_energy_bar.value <= 0:
+		if AutoLoad.rocket_fuel_left <= 0:
 			_is_flying = false
 			flying_particles.set_emitting(false)
 	#		else: return
@@ -278,7 +290,8 @@ func _get_sprite_state() -> void:
 		# so stays on previous animation
 		print("pickups collected  ", pickups_collected)
 		
-		
+#	if loading_energy_bar.visible == true:
+#		_update_loading_bar(loading_value)
 
 
 
@@ -287,7 +300,7 @@ func _handle_inputs():
 	if velocity.y > 0 and Input.is_action_pressed("jump") and not _is_flying:
 		_jump_finished = true
 	
-	if (Input.is_action_pressed("jump") and _power_can_fly) and ((not is_on_floor() and _jump_finished) or (_power_can_jump == false)) and rocket_energy_bar.value != 0:
+	if (Input.is_action_pressed("jump") and _power_can_fly) and ((not is_on_floor() and _jump_finished) or (_power_can_jump == false)) and AutoLoad.rocket_fuel_left != 0:
 		_is_flying = true
 		flying_particles.set_emitting(true)
 
@@ -295,20 +308,23 @@ func _handle_inputs():
 	if Input.is_action_just_released("jump"):
 		_is_flying = false
 		flying_particles.set_emitting(false)
-		rocket_energy_bar.visible = false
+		loading_energy_bar.visible = false
 	
 
-		
+	if Input.is_action_just_pressed("jump"): #should not be jump but just for now
+		_is_dashing = true
 
 
 func _check_pickups():
-	for pickup in pickups_collected:
+	for pickup in AutoLoad.pickups_collected:
 		if pickup == Jump:
 			_power_can_jump = true
-			
+			get_node("CartridgeSlots").get_child(Jump).visible = true
 		if pickup == Fly:
 			_power_can_fly = true
+			get_node("CartridgeSlots").get_child(Fly).visible = true
 				
+	
 
 
 func _on_portal_2d_body_entered(_body):
@@ -327,5 +343,12 @@ func _on_health_depleted():
 	queue_free()
 
 
+		
+
 func _on_timer_timeout():
 	print("5 sec has passed")
+
+
+#func _update_loading_bar(new_value:float):
+#	loading_energy_bar.value = new_value
+	

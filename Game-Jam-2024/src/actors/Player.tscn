@@ -376,7 +376,7 @@ texture = ExtResource("4_ewbld")
 vframes = 2
 script = ExtResource("3_0ak2t")
 
-[node name="TextureProgressBar" type="TextureProgressBar" parent="PlayerSprites"]
+[node name="LoadingProgressBar" type="TextureProgressBar" parent="PlayerSprites"]
 visible = false
 modulate = Color(1, 1, 1, 0.627451)
 offset_left = -7.0
@@ -450,17 +450,6 @@ visible = false
 position = Vector2(2.5, -53)
 shape = SubResource("RectangleShape2D_2nkif")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(0, -177)
-limit_left = 0
-limit_top = 0
-limit_smoothed = true
-position_smoothing_speed = 1.0
-drag_horizontal_enabled = true
-drag_vertical_enabled = true
-drag_left_margin = 0.0
-drag_right_margin = 0.0
-
 [node name="Animators" type="Node2D" parent="."]
 
 [node name="JumpNSquish" type="AnimationPlayer" parent="Animators"]
@@ -522,6 +511,16 @@ hue_variation_max = 1.0
 
 [node name="DebugTimer" type="Timer" parent="."]
 wait_time = 5.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+limit_left = 0
+limit_top = 0
+limit_smoothed = true
+position_smoothing_speed = 1.0
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.0
+drag_right_margin = 0.0
 
 [connection signal="health_depleted" from="." to="." method="_on_health_depleted"]
 [connection signal="timeout" from="DebugTimer" to="." method="_on_timer_timeout"]

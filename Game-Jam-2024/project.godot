@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="OutofOrder - UNC-Game-Jam-2024"
-run/main_scene="res://leveltest1.tscn"
+run/main_scene="res://levels/Level1.tscn"
 config/features=PackedStringArray("4.0", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+AutoLoad="*res://src/auto_load.gd"
 
 [display]
 
@@ -47,6 +51,7 @@ move_down={
 2d_physics/layer_1="Player"
 2d_physics/layer_3="Pickups"
 2d_physics/layer_4="world"
+2d_physics/layer_5="Background"
 
 [rendering]
 
