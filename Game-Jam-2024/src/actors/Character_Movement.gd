@@ -22,6 +22,9 @@ extends actor
 @onready var loading_energy_bar:= $PlayerSprites/LoadingProgressBar
 @onready var flying_particles:= $Particles/FlyingBoost
 
+@onready var shoot_position := $ShootPosition
+@onready var lazer_beam := preload("res://src/Objects/lazer_beam.tscn")
+
 @onready var cart_slots:= []
 
 
@@ -311,9 +314,10 @@ func _handle_inputs():
 		loading_energy_bar.visible = false
 	
 
-	if Input.is_action_just_pressed("jump"): #should not be jump but just for now
-		_is_dashing = true
+	if Input.is_action_just_pressed("space_bar"): #should not be jump but just for now
+		_shoot_lazer()
 
+	
 
 func _check_pickups():
 	for pickup in AutoLoad.pickups_collected:
@@ -351,4 +355,14 @@ func _on_timer_timeout():
 
 #func _update_loading_bar(new_value:float):
 #	loading_energy_bar.value = new_value
+func _shoot_lazer():
 	
+	var projectile_instance = lazer_beam.instantiate()
+	projectile_instance.position = shoot_position.global_position
+	projectile_instance.direction = direction_facing()
+	projectile_instance.player_velocity = velocity
+	projectile_instance.original_position = shoot_position.global_position
+
+	add_child(projectile_instance)
+
+

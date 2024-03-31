@@ -72,6 +72,13 @@ collision_layer = 0
 monitorable = false
 script = ExtResource("1_5nwof")
 
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -95.0
+offset_top = -225.0
+offset_right = 101.0
+offset_bottom = 10.0
+color = Color(0, 0, 0, 0.364706)
+
 [node name="Portal" type="Sprite2D" parent="."]
 position = Vector2(-78, -210)
 scale = Vector2(5, 5)
