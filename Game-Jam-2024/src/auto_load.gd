@@ -8,10 +8,7 @@ var rocket_fuel_left:float = 6
 func _ready():
 	pass
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
 
 
-func load_pickups(power_up_type):
+func load_pickups(_power_up_type):
 	pass

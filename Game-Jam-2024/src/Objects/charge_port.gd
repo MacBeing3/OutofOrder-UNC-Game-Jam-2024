@@ -10,12 +10,9 @@ func _ready():
 	animation_player.play("Idle")
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
 
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if player_body:
 		if AutoLoad.rocket_fuel_left < 6 and charging:
 			AutoLoad.rocket_fuel_left += get_physics_process_delta_time() * 3

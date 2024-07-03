@@ -41,9 +41,7 @@ func _ready():
 
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+
 
 
 func _on_area_2d_body_entered(body):
@@ -51,11 +49,11 @@ func _on_area_2d_body_entered(body):
 	if body.has_method("do_death"):
 		body.do_death()
 
-func _on_area_2d_area_entered(area):
-	pass # Replace with function body.
-#	area.get_parent().damage
-
-
+#func _on_area_2d_area_entered(area):
+#	pass # Replace with function body.
+##	area.get_parent().damage
+#
+#
 
 	
 #func on_timer_timeout():

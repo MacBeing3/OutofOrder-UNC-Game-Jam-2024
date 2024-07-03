@@ -37,9 +37,9 @@ var pickups_collected:=[]
 var _power_can_jump: bool = false
 var _jump_finished: bool = false
 
-
-var _power_can_dash: bool= false
-var _is_dashing:bool = false
+#dash variables
+#var _power_can_dash: bool= false
+#var _is_dashing:bool = false
 
 
 var _power_can_fly: bool= false
@@ -152,8 +152,10 @@ func calculate_move_velocity(
 			output.x = min(output.x + 2000 * get_physics_process_delta_time(),0)	
 
 #		Y Movemtn
+	if not _is_flying:
+		output.y += gravity * get_physics_process_delta_time()
+		
 
-	output.y += gravity * get_physics_process_delta_time() if not _is_flying else 0
 
 	#jumping up
 	if direction.y == -1.0 and _power_can_jump:
